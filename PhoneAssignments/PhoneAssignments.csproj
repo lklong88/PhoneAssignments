@@ -5,6 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Data\seed.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="Data\seed.json"
   </ItemGroup>
 </Project>
