@@ -1,0 +1,53 @@
+@model AssignmentsIndexViewModel
+@{ ViewData["Title"] = "Assignments"; }
+
+<table>
+    <thead>
+        <tr><th>Team Member</th><th>Phone Number</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var row in Model.Rows)
+    {
+        <tr>
+            <td>@row.Member.FullName</td>
+            @if (row.Phone is not null)
+            {
+                <td>@row.Phone.Number</td>
+                <td>
+                    <form asp-action="Unassign" method="post"
+                          onsubmit="return confirm('Remove this phone number from @row.Member.FullName?');">
+                        <input type="hidden" name="teamMemberId" value="@row.Member.Id" />
+                        <button type="submit" class="danger">Remove</button>
+                    </form>
+                </td>
+            }
+            else
+            {
+                <td class="muted">Unassigned</td>
+                <td>
+                    @if (Model.AvailableNumbers.Any())
+                    {
+                        <form asp-action="Assign" method="post" class="inline">
+                            <input type="hidden" name="TeamMemberId" value="@row.Member.Id" />
+                            <select name="PhoneNumberId" required aria-label="Phone number for @row.Member.FullName">
+                                <option value="">Select number…</option>
+                                @foreach (var n in Model.AvailableNumbers)
+                                {
+                                    <option value="@n.Id">@n.Number</option>
+                                }
+                            </select>
+                            <button type="submit">Assign</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="muted">No numbers available</span>
+                    }
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p class="muted">@Model.AvailableNumbers.Count available number(s).</p>
